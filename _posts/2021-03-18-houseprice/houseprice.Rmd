@@ -1,0 +1,413 @@
+---
+title: "PREDICTION: HOUSE PRICE IN LONDON USING RANDOM FOREST"
+description: |
+  Predicting House Price in London using "tidymodels" in R-Studio
+author:
+  - name: Zahier Nasrudin
+    url: {}
+date: 03-18-2021
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = T, warning = F, message = F)
+
+library(tidyverse)
+library(skimr)
+library(janitor)
+library(here)
+
+theme_set(theme_minimal())
+
+```
+
+## Data Loading
+
+In this post, we will be doing a prediction using Random Forest from Tidymodels in R. This data set can be obtained from <https://www.kaggle.com/arnavkulkarni/housing-prices-in-london.>
+
+```{r data-loading}
+
+london <- read_csv(here("_posts/2021-03-18-houseprice/london.csv")) %>%
+  clean_names()
+```
+
+## Description
+
+The dataset contains 3480 observations and the features:
+
+1)  Property name
+
+2)  Price (£)
+
+3)  House type
+
+4)  Area (Square Feet)
+
+5)  Number of bedrooms
+
+6)  Number of bathrooms
+
+7)  Number of receptions
+
+8)  Location
+
+9)  City/Country
+
+10) Postal Code
+
+```{r}
+
+london %>% 
+  glimpse()
+
+```
+
+## Exploring Data
+
+### Property name
+
+Top 20 Property Name (Frequency)
+
+```{r}
+
+london %>%
+  count(property_name, sort = TRUE) %>%
+  head(20) %>%
+  mutate(property_name = fct_reorder(property_name, n)) %>%
+  ggplot(aes(x = property_name, y = n)) +
+  geom_col(fill = "light blue") +
+  coord_flip()+
+  labs(title = "Property Name",
+       subtitle = "Top 20 (Frequency)",
+       x = "Property Name",
+       y = "Total")
+
+```
+
+### House Type
+
+```{r}
+
+london <- london %>%
+  mutate(house_type = fct_lump(house_type, n = 3))
+
+london %>%
+  count(house_type, sort = TRUE) %>%
+  mutate(house_type = fct_reorder(house_type, n)) %>%
+  ggplot(aes(x = house_type, y = n)) +
+  geom_text(aes(label= n), 
+                vjust=0.5, hjust=0, size = 3)+
+  geom_col(fill = "light blue") +
+  coord_flip(clip = "off")+
+  labs(title = "House Type",
+       x = "House Type",
+       y = "Total")
+
+```
+
+### House Price
+
+The graph is skewed to the right, which means there are more lower price houses as compared to the higher price houses.
+
+```{r}
+
+london %>%
+  ggplot(aes(x = price)) +
+  geom_histogram(fill = "light blue") +
+  scale_y_continuous(labels = scales::comma_format()) +
+  scale_x_continuous(labels = scales::comma_format()) +
+  labs(title = "House Price (Histogram)",
+       x = "House Price",
+       y = "Total")
+
+```
+
+### House Price (Log 10)
+
+```{r}
+
+london %>%
+  ggplot(aes(x = price)) +
+  geom_histogram(fill = "light blue") +
+  scale_y_continuous(labels = scales::comma_format()) +
+  scale_x_log10(labels = scales::comma_format()) +
+  labs(title = "House Price (Histogram)",
+       subtitle = "Log 10",
+       x = "House Price",
+       y = "Total")
+
+```
+
+### Price vs Area (Sq Ft)
+
+Notice that the most expensive house is only slightly higher than 5,000 sq ft in area size. We could also see that most of the houses are at the lower side of the price and the area size.
+
+```{r}
+
+london %>%
+  ggplot(aes(x = price, y = area_in_sq_ft, colour = house_type)) +
+  geom_point() +
+  scale_y_continuous(labels = scales::comma_format()) +
+  scale_x_continuous(labels = scales::comma_format()) +
+  labs(title = "Price vs Area (Sq Ft)",
+       x = "House Price",
+       y = "Area (Sq ft)",
+       colour = "House Type")
+
+```
+
+### Area Size and Number of bathrooms
+
+It appears that the total number of bathrooms and the total number of bedrooms are the same. If it does, that does not make sense at all.
+
+```{r}
+
+london %>%
+  ggplot(aes(x = no_of_bedrooms, y = no_of_bathrooms, colour = house_type)) +
+  geom_point() +
+  scale_y_continuous(labels = scales::comma_format()) +
+  scale_x_continuous(labels = scales::comma_format()) +
+  labs(title = "Bedrooms and Bathrooms",
+       x = "No of Bedrooms",
+       y = "No of bathrooms",
+       colour = "House Type")
+
+```
+
+Let's check, just to be sure. We will check for the total number of receptions too
+
+```{r}
+
+london %>%
+  mutate(check_room = if_else(no_of_bedrooms == no_of_bathrooms,
+                              "SAME",
+                              "DIFFERENT"),
+         check_reception = if_else(no_of_bedrooms == no_of_receptions,
+                              "SAME",
+                              "DIFFERENT")) %>%
+
+  select(check_room, check_reception) %>%
+  unique()
+```
+
+Yes, there is no difference between the total number of bathrooms and the total number of bedrooms / receptions. We will just use the number of bedrooms then.
+
+### Location
+
+Location (Frequency). Too many missing values in the Location column. We will not include this column then for prediction later.
+
+```{r}
+
+london %>%
+  count(location, sort = TRUE) %>%
+  head(10) %>%
+  kableExtra::kable()
+```
+
+### City
+
+```{r}
+
+london <- london %>%
+    mutate(city_county = fct_lump(city_county, n = 3))
+
+london %>%
+  count(city_county) %>%
+  mutate(city_county = fct_reorder(city_county, -n)) %>%
+  ggplot(aes(x = city_county, y = n)) +
+  geom_col(fill = "light blue")
+  
+```
+
+### Logarithm of House Price
+
+We will use the logarithm of the house price for prediction. Features that we will use:
+
+1.  House Type
+2.  Area
+3.  Number of bedrooms
+4.  City country
+5.  Logarithm of the house price (Outcome)
+
+```{r}
+
+london <- london %>%
+  mutate(price_log = log10(price))
+
+london_predict <- london %>%
+  select(house_type, area_in_sq_ft, no_of_bedrooms, city_county, price_log)
+```
+
+## Tune Hyper-parameters
+
+1.  Split the data set into training and testing sets
+
+2.  We will then try to tune:
+
+    1.  mtry
+
+    2.  trees
+
+```{r}
+
+library(tidymodels)
+
+set.seed(1000)
+
+
+london_split <- initial_split(london_predict)
+london_train <- training(london_split)
+london_test <- testing(london_split)
+
+london_split
+```
+
+### Recipe
+
+Define a recipe
+
+1.  We will be adding one extra process, where we will change city\_contry into dummy variables
+
+```{r}
+
+price_recipe <- london_train %>%
+  recipe(price_log ~.) %>%
+  step_dummy(city_county)
+```
+
+### Workflow
+
+Define a workflow
+
+```{r}
+
+price_workflow <- workflow() %>%
+  add_recipe(price_recipe)
+```
+
+We will then define model specifications
+
+```{r}
+
+random_forest_model <- rand_forest(
+  mode = "regression",
+  mtry = tune(),
+  trees = tune()
+) %>%
+  set_engine("ranger")
+
+random_forest_model
+```
+
+```{r}
+
+random_forest_workflow <- price_workflow %>%
+  add_model(random_forest_model)
+
+random_forest_workflow
+
+```
+
+Finding the best values using a grid. We will also fold using cross validation
+
+```{r}
+
+set.seed(1000)
+
+price_folds <- vfold_cv(london_train)
+
+random_forest_grid <- tune_grid(
+  random_forest_workflow,
+  resamples = price_folds,
+  grid = 20
+)
+
+random_forest_grid
+```
+
+```{r}
+
+random_forest_grid %>%
+  collect_metrics()
+```
+
+Based on the graph below, we could see that most of the hyperparameters produced good results (low RMSE). It can also be seen that mtry = 1 produced the worst RMSE.
+
+```{r}
+
+random_forest_grid %>%
+  collect_metrics() %>%
+  filter(.metric == "rmse") %>%
+  mutate(mtry = as.factor(mtry)) %>%
+  ggplot(aes(x = trees, y = mean, colour = mtry)) +
+  geom_point() +
+  labs(y = "RMSE")
+
+
+```
+
+### Select the best model
+
+```{r}
+
+best_rmse <- select_best(random_forest_grid, "rmse")
+
+final_random_forest <- finalize_model(
+  random_forest_model,
+  best_rmse
+)
+
+final_random_forest
+
+```
+
+### Fit the best model
+
+Based on the RMSE and R-square, I would say that is quite decent.
+
+```{r}
+
+final_workflow <- workflow() %>%
+  add_recipe(price_recipe) %>%
+  add_model(final_random_forest)
+
+final_model<- final_workflow %>%
+  last_fit(london_split)
+
+final_model %>%
+  collect_metrics()
+```
+
+### Save prediction results
+
+```{r}
+
+predict_result <- final_model %>%
+  collect_predictions() %>%
+  select(.pred) %>%
+  bind_cols(london_test) %>%
+  rename(predicted_random_forest = .pred)
+```
+
+### Summarise the results
+
+```{r}
+
+predict_result %>%
+  ggplot(aes(x = price_log, y = predicted_random_forest, 
+             colour = house_type))+
+  geom_point()+
+  geom_abline(lty = 2, color = "gray80", size = 1.5)+
+  facet_wrap(house_type ~.) +
+  labs(x = "Price (Log 10)",
+       y = "Predicted Log Price") +
+  theme(legend.position = "none") 
+
+```
+
+From this graph, we could get an overview of the actual price vs the predicted price. Please let me know your thoughts on this.
+
+Thanks
+

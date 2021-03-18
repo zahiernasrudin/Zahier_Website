@@ -1,0 +1,13 @@
+name: "."
+title: "Zahier Nasrudin"
+description: |
+  Zahier
+output_dir: "docs"
+navbar:
+  right:
+    - text: "Home"
+      href: index.html
+    - text: "Blog"      # add
+      href: Blog.html   # add
+theme: postcards.css
+output: distill::distill_article

@@ -1,0 +1,36 @@
+---
+title: "Zahier Nasrudin"
+site: distill::distill_website
+
+---
+
+```{r layout= "l-screen-inset", echo = FALSE}
+knitr::include_graphics("image/city.jpg")
+```
+
+# Bio
+
+I am an Analyst working in Nielsen Malaysia. I have interests in Data Visualization, Text Mining & R-Studio programming language.
+
+## My Education:
+
+-   Diploma in Actuarial Science
+
+-   Bachelor in Actuarial Science
+
+-   Master in Data Science
+
+I received my Master in Data Science from Universiti Teknologi Mara (UiTM) where I wrote my thesis on the Prediction of Depression, Anxiety, Stress and Normal tweets based on M-DASS42 framework using Convolutional Neural Network (CNN)
+
+To collaborate, or for any inquiries, you can find me at:
+
+```{r, echo = FALSE}
+df <- dplyr::tibble(what = c('<i class="fab fa-twitter"></i>',
+                           '<i class="fab fa-github"></i>',
+                           '<i class="fas fa-envelope"></i>'),
+                 where = c("[mhdzahier](https://twitter.com/MhdZahier)",
+                           "[zahiernasrudin](https://github.com/zahiernasrudin)",
+                        "[zahiernasrudin@gmail.com](mailto:zahiernasrudin@gmail.com)"))
+
+knitr::kable(df, col.names = c("", ""), escape = FALSE)
+```
