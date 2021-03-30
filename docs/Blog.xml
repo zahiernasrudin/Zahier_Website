@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:dc="http://purl.org/dc/elements/1.1/" version="2.0">
+  <channel>
+    <title>Zahier Nasrudin</title>
+    <link>https://zahier-nasrudin.netlify.app/</link>
+    <atom:link href="https://zahier-nasrudin.netlify.app/Blog.xml" rel="self" type="application/rss+xml"/>
+    <description>Zahier
+</description>
+    <generator>Distill</generator>
+    <lastBuildDate>Mon, 29 Mar 2021 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>Stemming: Malay Text</title>
+      <dc:creator>Zahier Nasrudin</dc:creator>
+      <link>https://zahier-nasrudin.netlify.app/posts/stem-malay-text</link>
+      <description>Comparing two Malay word stemmers</description>
+      <guid>https://zahier-nasrudin.netlify.app/posts/stem-malay-text</guid>
+      <pubDate>Mon, 29 Mar 2021 00:00:00 +0000</pubDate>
+      <media:content url="https://zahier-nasrudin.netlify.app/posts/stem-malay-text/images/computer.jpg" medium="image" type="image/jpeg"/>
+    </item>
+    <item>
+      <title>Prediction: House Price In London Using Random Forest</title>
+      <dc:creator>Zahier Nasrudin</dc:creator>
+      <link>https://zahier-nasrudin.netlify.app/posts/house-price</link>
+      <description>Predicting House Price in London using "tidymodels" in R-Studio</description>
+      <guid>https://zahier-nasrudin.netlify.app/posts/house-price</guid>
+      <pubDate>Thu, 18 Mar 2021 00:00:00 +0000</pubDate>
+      <media:content url="https://zahier-nasrudin.netlify.app/posts/house-price/houseprice_files/figure-html5/unnamed-chunk-2-1.png" medium="image" type="image/png" width="1248" height="768"/>
+    </item>
+    <item>
+      <title>Store Matching Using Fuzzyjoin In R</title>
+      <dc:creator>Zahier Nasrudin</dc:creator>
+      <link>https://zahier-nasrudin.netlify.app/posts/fuzzy-matching</link>
+      <description>Matching stores between two datasets.</description>
+      <guid>https://zahier-nasrudin.netlify.app/posts/fuzzy-matching</guid>
+      <pubDate>Thu, 10 Sep 2020 00:00:00 +0000</pubDate>
+      <media:content url="https://zahier-nasrudin.netlify.app/posts/fuzzy-matching/images/market.jpg" medium="image" type="image/jpeg"/>
+    </item>
+  </channel>
+</rss>

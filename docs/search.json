@@ -6,21 +6,21 @@
       "description": "Some additional details about the website",
       "author": [],
       "contents": "\r\n\r\n\r\n\r\n",
-      "last_modified": "2021-03-18T16:53:47+08:00"
+      "last_modified": "2021-03-30T11:02:48+08:00"
     },
     {
       "path": "Blog.html",
       "title": "Blog",
       "author": [],
       "contents": "\r\n\r\n\r\n\r\n",
-      "last_modified": "2021-03-18T16:54:30+08:00"
+      "last_modified": "2021-03-30T11:03:03+08:00"
     },
     {
       "path": "index.html",
       "title": "Zahier Nasrudin",
       "author": [],
       "contents": "\r\n\r\n\r\n\r\nBio\r\nI am an Analyst working in Nielsen Malaysia. I have interests in Data Visualization, Text Mining & R-Studio programming language.\r\nMy Education:\r\nDiploma in Actuarial Science\r\nBachelor in Actuarial Science\r\nMaster in Data Science\r\nI received my Master in Data Science from Universiti Teknologi Mara (UiTM) where I wrote my thesis on the Prediction of Depression, Anxiety, Stress and Normal tweets based on M-DASS42 framework using Convolutional Neural Network (CNN)\r\nTo collaborate, or for any inquiries, you can find me at:\r\n\r\n\r\nmhdzahier\r\n\r\nzahiernasrudin\r\n\r\nzahiernasrudin@gmail.com\r\n\r\n\r\n\r\n\r\n",
-      "last_modified": "2021-03-18T16:54:35+08:00"
+      "last_modified": "2021-03-30T11:03:08+08:00"
     }
   ],
   "collections": ["posts/posts.json"]

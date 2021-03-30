@@ -31,6 +31,5 @@ df <- dplyr::tibble(what = c('<i class="fab fa-twitter"></i>',
                  where = c("[mhdzahier](https://twitter.com/MhdZahier)",
                            "[zahiernasrudin](https://github.com/zahiernasrudin)",
                         "[zahiernasrudin@gmail.com](mailto:zahiernasrudin@gmail.com)"))
-
 knitr::kable(df, col.names = c("", ""), escape = FALSE)
 ```
