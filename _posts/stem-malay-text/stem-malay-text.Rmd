@@ -1,0 +1,156 @@
+---
+title: "Stemming: Malay Text"
+description: |
+  Comparing two Malay word stemmers   
+author:
+  - name: Zahier Nasrudin
+    url: https://zahier-nasrudin.netlify.app/
+date: 2021-03-29
+preview: images/computer.jpg
+bibliography: citations.bib
+output:
+  distill::distill_article:
+    self_contained: false
+    toc: true
+    toc_depth: 2
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+# Introduction
+
+Word stemming is a process that has been used widely in text mining by removing affixes in words to generate their respective root words. For example, "*diambil*" is reduced to its root word: "*ambil*".
+
+## Purpose of this blog post
+
+Word stemming is often used to reduce the size (eg: "*diambil*" is now treated as "*ambil*") & to help increase the effectiveness and the accuracy of a research as explained by [@sembok2011effectiveness]. Hence, the purpose of this post is to compare two researches of word stemming (Malay text).
+
+# Methods
+
+## First article
+
+The first is article from [@khanmalay]. The authors listed 4 Malay affixes:
+
+1.  Prefix : Beginning of a word
+
+2.  Suffix: End of a word
+
+3.  Infix: Middle of a word
+
+4.  Confix: Beginning and the end of the word.
+
+Due to the complexity of the Malay language, they developed a dictionary of 9512 root-words to help handling uncertainty during the stemming process
+
+### Steps
+
+1.  **Check dictionary:** Check inputs for root words using the dictionary
+
+    1.  Stop if all now root words
+
+    2.  Or continue
+
+2.  **Stem extrasuffix:** [@khanmalay] explained the extra suffix as "*-nya"*
+
+3.  **Check dictionary:** Check inputs for root words using the dictionary
+
+    1.  Stop if all now root words
+
+    2.  Or continue
+
+4.  **Stem plural:** If the word is plural, then stem to root word
+
+5.  **Stem infix:** If the word contains infix, then remove infix
+
+6.  **Check dictionary again:** Check inputs for root words using the dictionary
+
+    1.  Stop if all now root words
+
+    2.  Or continue
+
+7.  **Stem prefix:** If the word contains prefix, then remove prefix. Eg: "*ter*" & "*per*"
+
+    1.  Special case: Prefix "*mem*" would be replaced with either "*f*" or "*m*"
+
+    2.  The authors also checked if the word is less than 5 alphabets before stemming in order to prevent overstemming from happening
+
+8.  **Check dictionary again:** Check inputs for root words using the dictionary
+
+    1.  Stop if all now root words
+
+    2.  Or continue
+
+9.  **Stem suffix:** If the word contains suffix, then remove suffix. Eg: "*nya*" & "*kan*"
+
+    1.  Again, if the word is less than 5 alphabets, they would not remove the suffix
+
+10. **Check dictionary again:** Check inputs for root words using the dictionary
+
+### Limitations
+
+1.  Shorter prefix or suffix will always get ignored.
+
+    1.  For example, "*pem"* will always be removed instead of *"pe" . **"Pemain"**: "pem"* will be removed instead of *"pe"* which results the word to be *"ain"* which completely changes the meaning of the word.
+
+## Second article
+
+Similar to the first article, [@kassim2016enhanced] listed 4 Malay affixes:
+
+1.  Prefix : Beginning of a word
+
+2.  Suffix: End of a word
+
+3.  Infix: Middle of a word
+
+4.  Confix: Beginning and the end of the word.
+
+### Steps
+
+The authors also used a dictionary to handle the uncertainty faced during the stemming process.
+
+1.  **Check dictionary:** Check inputs for root words using the dictionary
+
+    1.  Stop if all now root words
+
+    2.  Or continue
+
+2.  **Stem infix:** If the word contains infix:
+
+    1.  Check dictionary
+
+    2.  Remove infix
+
+3.  **Stem confix:** If the word contains confix:
+
+    1.  Check dictionary
+
+    2.  Remove confix
+
+4.  **Stem prefix:** If the word contains prefix:
+
+    1.  Check dictionary
+
+    2.  Remove prefix
+
+5.  **Stem suffix:** If the word contains suffix:
+
+    1.  Check dictionary
+
+    2.  Remove suffix
+
+### Limitations
+
+1.  Stemming names, places or brand names. For example
+
+    1.  Ali (name)
+
+    2.  Jerman (place)
+
+    3.  Malaysiakini (brand-name)
+
+# Conclusion
+
+This blog post compares two Malay word stemmers. Both [@khanmalay] and [@kassim2016enhanced] used a dictionary in their respective stemmer. [@khanmalay] proposed to find the pattern of "-*nya" first,* while [@kassim2016enhanced] proposed to find the pattern of infixation first.
+
+Thanks for reading!
