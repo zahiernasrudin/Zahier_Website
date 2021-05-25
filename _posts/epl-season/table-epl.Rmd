@@ -1,0 +1,147 @@
+---
+title: "UEFA Champions League top scorers: Reactable & Reactablefmtr"
+description: |
+  Visualizing UEFA Champions League top scorers using reactable & reactablefmtr package   
+author:
+  - name: Zahier Nasrudin
+    url: https://zahier-nasrudin.netlify.app/
+date: 2021-03-29
+preview: images/computer.jpg
+output:
+  distill::distill_article:
+    self_contained: false
+    toc: true
+    toc_depth: 2
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+
+library(dplyr)
+library(readr)
+library(reactable)
+library(reactablefmtr)
+library(htmltools)
+
+```
+
+# Introduction
+
+I just started learning on how to create tables using reactable & reactablefmtr. I, therefore will **try** to visualize the UEFA Champions League top scorers
+
+# Table
+
+```{r,  layout="l-body-outset"}
+
+top_scorer <- read_csv("top_scorer.csv")
+
+source("data_bar.r")
+
+
+table_theme <- function() {
+  reactable::reactableTheme(
+    style = list(fontFamily = "Garamond", fontSize = "16px"),
+    headerStyle = list(
+      borderColor = "#333")
+  )}
+
+
+
+
+table <- reactable(top_scorer %>% select(-`Club(s) (Goals)`),
+          theme = table_theme,
+          columns = list(
+            Rank = colDef(cell = icon_sets(top_scorer, 
+                                           colors = c("#0E1E5B", "#0E1E5B", "#0E1E5B"),
+                                           icons = c("futbol", "futbol", "futbol")),
+                          align = "left",
+                          width = 70),
+            Player = colDef(details = function(index) {
+              div(style = list(fontSize = 15, 
+                               color = "#0E1E5B"), 
+                  paste("Goals:",top_scorer[index, "Club(s) (Goals)"]))
+            },
+            width = 180,
+            align = "left"),
+            Goals = colDef(align = "left", # align column header
+                              cell = data_bars(top_scorer, 
+                                               fill_color = c("#0E1E5B"),
+                                               text_position = "outside-end")),
+            Apps = colDef(align = "left", # align column header
+                           cell = data_bars(top_scorer, 
+                                            fill_color = c("#0E1E5B"),
+                                            text_position = "outside-end")),
+            Ratio = colDef(align = "right", # align column header
+                           style = color_scales(top_scorer,
+                                                colors = c("lightpink", 
+                                                           "white", 
+                                                           "#bfeeff", 
+                                                           "#96c5f1", 
+                                                           "#6594C0")),
+                           format = colFormat(percent = TRUE, digits = 1)
+          ),
+          Years = colDef(align = "right")),
+          highlight = TRUE,
+          searchable = TRUE)
+
+
+
+div(class = "title",
+  div("Table last updated on 5 May 2021",
+  table,
+  tags$span(
+    "Note: The table above does not include goals scored in the qualification stage of the competition."),
+  div(
+    "Table created by: @mhdzahier  •  Data: Wikipedia")
+  ))
+
+
+
+
+```
+
+</br>
+
+# Code for the table
+
+``` {.R}
+reactable(top_scorer %>% select(-`Club(s) (Goals)`),
+          theme = table_theme,
+          columns = list(
+            Rank = colDef(cell = icon_sets(top_scorer, 
+                                           colors = c("#0E1E5B", "#0E1E5B", "#0E1E5B"),
+                                           icons = c("futbol", "futbol", "futbol")),
+                          align = "left",
+                          width = 70),
+            Player = colDef(details = function(index) {
+              div(style = list(fontSize = 15, 
+                               color = "#0E1E5B"), 
+                  paste("Goals:",top_scorer[index, "Club(s) (Goals)"]))
+            },
+            width = 180,
+            align = "left"),
+            Goals = colDef(align = "left", # align column header
+                              cell = data_bars(top_scorer, 
+                                               fill_color = c("#0E1E5B"),
+                                               text_position = "outside-end")),
+            Apps = colDef(align = "left", # align column header
+                           cell = data_bars(top_scorer, 
+                                            fill_color = c("#0E1E5B"),
+                                            text_position = "outside-end")),
+            Ratio = colDef(align = "right", # align column header
+                           style = color_scales(top_scorer,
+                                                colors = c("lightpink", 
+                                                           "white", 
+                                                           "#bfeeff", 
+                                                           "#96c5f1", 
+                                                           "#6594C0")),
+                           format = colFormat(percent = TRUE, digits = 1)
+          ),
+          Years = colDef(align = "right")),
+          highlight = TRUE,
+          searchable = TRUE)
+```
+
+# Conclusion
+
+Thanks for reading!
