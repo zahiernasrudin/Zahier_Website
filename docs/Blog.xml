@@ -7,15 +7,24 @@
     <description>Zahier
 </description>
     <generator>Distill</generator>
-    <lastBuildDate>Mon, 29 Mar 2021 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 01 Jun 2021 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title> Working with date-time data: Lubridate &amp; Janitor</title>
+      <dc:creator>Zahier Nasrudin</dc:creator>
+      <link>https://zahier-nasrudin.netlify.app/posts/work-date-time</link>
+      <description>Handling date-time data using Lubridate package &amp; Janitor package in R-Studio</description>
+      <guid>https://zahier-nasrudin.netlify.app/posts/work-date-time</guid>
+      <pubDate>Tue, 01 Jun 2021 00:00:00 +0000</pubDate>
+      <media:content url="https://zahier-nasrudin.netlify.app/posts/work-date-time/images/calendar.jpg" medium="image" type="image/jpeg"/>
+    </item>
     <item>
       <title>UEFA Champions League top scorers: Reactable &amp; Reactablefmtr</title>
       <dc:creator>Zahier Nasrudin</dc:creator>
       <link>https://zahier-nasrudin.netlify.app/posts/epl-season</link>
       <description>Visualizing UEFA Champions League top scorers using reactable &amp; reactablefmtr package</description>
       <guid>https://zahier-nasrudin.netlify.app/posts/epl-season</guid>
-      <pubDate>Mon, 29 Mar 2021 00:00:00 +0000</pubDate>
-      <media:content url="https://zahier-nasrudin.netlify.app/posts/epl-season/images/computer.jpg" medium="image" type="image/jpeg"/>
+      <pubDate>Tue, 25 May 2021 00:00:00 +0000</pubDate>
+      <media:content url="https://zahier-nasrudin.netlify.app/posts/epl-season/images/football.jpg" medium="image" type="image/jpeg"/>
     </item>
     <item>
       <title>Stemming: Malay Text</title>

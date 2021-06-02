@@ -1,0 +1,155 @@
+---
+title: " Working with date-time data: Lubridate & Janitor"
+description: |
+  Handling date-time data using Lubridate package & Janitor package in R-Studio
+author:
+  - name: Zahier Nasrudin
+    url: https://zahier-nasrudin.netlify.app/
+date: 06-02-2021
+preview: images/calendar.jpg
+output:
+  distill::distill_article:
+    self_contained: false
+    toc: true
+    toc_depth: 2
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = T, warning = F, message = F)
+
+```
+
+# Introduction
+
+Dealing with date-time is something that I will usually avoid when using R. One of the reasons:
+
+1.  It can be frustrating: Due to the fact that there could be multiple types of date-time, **or** different languages (locale)
+
+However, I had to deal with a few date-time datasets recently. By googling & researching, I found lubridate & janitor packages to be quite interesting to use. Two resources that I have been using & like:
+
+1.  [R for Data Science](https://r4ds.had.co.nz/dates-and-times.html)
+2.  [Lubridate package](https://lubridate.tidyverse.org/)
+3.  [Janitor package](https://rdrr.io/cran/janitor/man/excel_numeric_to_date.html)
+
+## Data Loading
+
+```{r data-loading}
+
+# Libraries required
+
+library(tidyverse)
+library(janitor)
+library(here)
+library(readxl)
+library(lubridate)
+
+
+date_time <- read_excel(here("_posts/work-date-time/date-time.xlsx"))
+
+
+
+```
+
+## Description
+
+The dataset used in this blog contains 2 columns & 16,254 records :
+
+```{r}
+
+glimpse(date_time)
+
+
+
+```
+
+1.  Date: Date of transaction made
+2.  Timestamp: Time of transaction made
+
+## Exploring Data
+
+Looking at the structure of the dataset above, there are 2 problems.
+
+1.  Date column is not displaying properly
+2.  Timestamp column is not displaying properly. For example, 17:39:29 is displayed as 1899-12-31 17:39:29 when uploaded in R. Therefore we will need to extract just the timestamp later on
+
+### First problem: Date column
+
+Lets have a look at the first problem:
+
+1.  Weird numeric format (44287, 44310, 44311, 44312). This happens because the date is in excel date format (it counts days). A similar problem can found in [stack overflow](https://stackoverflow.com/questions/43230470/how-to-convert-excel-date-format-to-proper-date-in-r/62334132)
+2.  Multiple date formats in a column (04.01.2021, 1-Mei-2021, 27/5/2021)
+
+```{r}
+
+date_time %>%
+  count(Date, sort = TRUE)
+
+```
+
+Fixing the numeric format to date is easy to solve using excel_numeric_to_date using the janitor package:
+
+```{r}
+
+date_time_processed <- date_time %>%
+  mutate(`Date 2` = excel_numeric_to_date(as.numeric(Date)))
+
+```
+
+So we managed to convert from numeric to date format (Compare Date column vs Date 2 column):
+
+```{r}
+
+date_time_processed %>%
+  count(Date, `Date 2`, sort = TRUE )
+
+
+```
+
+Now we need to standardize the different date formats (04.01.2021, 1-Mei-2021 and 27/5/2021). To fix that, I will be using parse_date_time2 from lubridate package. Once the date is extracted, I will then convert it to date format. The process:
+
+1.  Using if_else() to find the missing values in "Date 2" column. For this case, the ones that failed to convert from numeric to date (04.01.2021, 1-Mei-2021 and 27/5/2021)
+2.  Parse 04.01.2021, 1-Mei-2021 and 27/5/2021 using parse_date_time2 and specify the pattern (%d%m%y) which is day, month and year.
+3.  Convert them to date format using as_date
+
+```{r}
+
+date_time_processed <- date_time_processed %>%
+  mutate(`Date 3` = if_else(is.na(`Date 2`),
+                            parse_date_time2(Date, "%d%m%Y") %>% as_date(),
+                            `Date 2`)) 
+
+```
+
+Checking it back, we managed to convert all them successfully (Date 3):
+
+```{r}
+
+date_time_processed %>%
+  count(Date, `Date 2` , `Date 3`)
+```
+
+### Second problem: Timestamp column
+
+Now for the last problem, timestamp! This is pretty straightforward. Here is the process:
+
+1.  Extract the timestamp using format() using pattern "%H:%M:%S" which is hour, minute and second
+2.  I will then combine the Date 3 column with extracted Timestamp2 column to create a date-time column
+
+```{r}
+
+date_time_processed <- date_time_processed %>%
+  mutate(Timestamp2 = format(Timestamp, "%H:%M:%S"),
+         Final_date = as_datetime(paste(`Date 3`, Timestamp2)))
+```
+
+The first 6 rows of our final_date column:
+
+```{r}
+
+date_time_processed %>%
+  select(Final_date) %>%
+  head()
+
+```
+
+Thanks for reading!

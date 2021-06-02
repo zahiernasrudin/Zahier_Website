@@ -5,8 +5,8 @@ description: |
 author:
   - name: Zahier Nasrudin
     url: https://zahier-nasrudin.netlify.app/
-date: 2021-03-29
-preview: images/computer.jpg
+date: 2021-05-25
+preview: images/football.jpg
 output:
   distill::distill_article:
     self_contained: false
