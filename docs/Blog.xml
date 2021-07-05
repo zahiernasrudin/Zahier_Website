@@ -7,14 +7,23 @@
     <description>Zahier
 </description>
     <generator>Distill</generator>
-    <lastBuildDate>Tue, 01 Jun 2021 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 05 Jul 2021 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>Tidy Tuesday: Employed Status</title>
+      <dc:creator>Zahier Nasrudin</dc:creator>
+      <link>https://zahier-nasrudin.netlify.app/posts/shiny-employviz</link>
+      <description>Exploring Employed Status using a Tidy Tuesday dataset</description>
+      <guid>https://zahier-nasrudin.netlify.app/posts/shiny-employviz</guid>
+      <pubDate>Mon, 05 Jul 2021 00:00:00 +0000</pubDate>
+      <media:content url="https://zahier-nasrudin.netlify.app/posts/shiny-employviz/images/worker.jpg" medium="image" type="image/jpeg"/>
+    </item>
     <item>
       <title> Working with date-time data: Lubridate &amp; Janitor</title>
       <dc:creator>Zahier Nasrudin</dc:creator>
       <link>https://zahier-nasrudin.netlify.app/posts/work-date-time</link>
       <description>Handling date-time data using Lubridate package &amp; Janitor package in R-Studio</description>
       <guid>https://zahier-nasrudin.netlify.app/posts/work-date-time</guid>
-      <pubDate>Tue, 01 Jun 2021 00:00:00 +0000</pubDate>
+      <pubDate>Wed, 02 Jun 2021 00:00:00 +0000</pubDate>
       <media:content url="https://zahier-nasrudin.netlify.app/posts/work-date-time/images/calendar.jpg" medium="image" type="image/jpeg"/>
     </item>
     <item>
