@@ -1,0 +1,209 @@
+---
+title: "Covid 19: Malaysia"
+description: |
+  Analyzing the number of Covid 19 cases, number of tests, and clusters in Malaysia
+author:
+  - name: Zahier Nasrudin
+    url: https://zahier-nasrudin.netlify.app/
+date: 08-09-2021
+preview: images/scientist.jpg
+output:
+  distill::distill_article:
+    self_contained: false
+    toc: true
+    toc_depth: 2
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = F, warning = F, message = F)
+
+library(tidyverse)
+library(skimr)
+library(janitor)
+library(here)
+library(reactable)
+library(reactablefmtr)
+
+theme_set(theme_minimal())
+
+```
+
+
+```{r data-loading}
+
+no_cases <- read_csv(("https://raw.githubusercontent.com/MoH-Malaysia/covid19-public/main/epidemic/cases_state.csv")) %>%
+  clean_names()
+
+no_tests <- read_csv("https://raw.githubusercontent.com/MoH-Malaysia/covid19-public/main/epidemic/tests_malaysia.csv") %>%
+  clean_names()
+ 
+no_deaths <- read_csv("https://raw.githubusercontent.com/MoH-Malaysia/covid19-public/main/epidemic/deaths_state.csv") %>%
+  clean_names()
+
+cluster <- read_csv("https://raw.githubusercontent.com/MoH-Malaysia/covid19-public/main/epidemic/clusters.csv") %>%
+  clean_names() %>%
+  mutate(category =  str_to_title(category))
+
+
+
+```
+
+
+## Description
+
+Malaysia's Ministry of Health (MoH) just released a public MoH Github repository. The github can be found here: https://github.com/MoH-Malaysia/covid19-public. So it would be nice if I could explore some of the datasets
+
+## Analysis
+
+```{r}
+
+cases_deaths <- no_cases %>%
+  inner_join(no_deaths, by = c("date", "state")) %>%
+  mutate(cases_new = abs(cases_new))
+
+no_cases_malaysia <- no_cases %>%
+  group_by(date) %>%
+  summarise(cases_new = sum(cases_new)) %>%
+  ungroup()
+
+no_tests_revised <- no_tests %>%
+  filter(date != "2020-03-16") %>%
+  inner_join(no_cases_malaysia, by = "date") %>%
+  mutate(total_test = rtk_ag + pcr) %>%
+  mutate(ratio_covid = cases_new / total_test)
+
+
+
+```
+
+### Number of cases
+
+Here is an overview of the number of cases in Malaysia by (State).
+
+```{r, fig.width= 10, fig.height= 7}
+
+cases_deaths %>%
+  ggplot(aes(x = date, y = cases_new)) + 
+  geom_line(colour = "light blue") +
+  scale_x_date(date_labels =  "%b %Y",
+                         date_breaks = "3 months") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+  theme(legend.position = "none") +
+  scale_y_continuous(labels = scales::comma) +
+  facet_wrap(~ state, scales = "free_y") + 
+  labs(title = "Number of Covid 19 cases",
+       subtitle = "17th of March 2020 - 8th of August 2021",
+       x = "",
+       y = "")
+
+
+#ggsave("covidcases.png", width = 9)
+
+```
+
+### Number of deaths
+
+The number of deaths in Malaysia by (State).
+
+```{r, fig.width= 10, fig.height= 7}
+
+cases_deaths %>%
+  group_by(state) %>%
+  summarise(deaths_new = sum(deaths_new)) %>%
+  mutate(state = fct_reorder(state, deaths_new)) %>%
+  ggplot(aes(x = state, y = deaths_new)) + 
+  geom_col(fill = "light blue") +
+  geom_text(aes(label=  scales::comma(deaths_new, accuracy = 1)), 
+                vjust=0.5, hjust=0, size = 3.2)+
+  scale_y_continuous(labels = scales::comma) +
+  coord_flip() +
+    labs(title = "Number of Covid-19 deaths",
+       subtitle = "17th of March 2020 - 8th of August 2021",
+       x = "",
+       y = "")
+
+
+#ggsave("coviddeaths.png", width = 9)
+
+
+```
+
+
+### Ratio (Positive Covid-19 tests)
+
+The data released for this is not by state level. Hence, we can only compare the ratio (number of Covid 19 cases / number of tests) by total country. The total tests variable is a combination of  Antigen Rapid Test Kits (RTK-Ag) and Real-time Reverse Transcription Polymerase Chain Reaction (RT-PCR) technology
+
+```{r, fig.width= 10, fig.height= 7}
+
+
+no_tests_revised %>%
+  ggplot(aes(x = date, y = ratio_covid)) +
+  geom_line(color = "light blue", size = 0.7) +
+  scale_y_continuous(labels = scales::percent) +
+  scale_x_date(date_labels =  "%b %Y",
+                         date_breaks = "3 months") +
+  labs(title = "Percentage of positive Covid 19 tests",
+       subtitle = "17th of March 2020 - 8th of August 2021",
+       x = "",
+       y = "No. of Covid 19 cases / No. of tests")
+
+
+#ggsave("percentagepositive.png", width = 9)
+
+```
+
+
+### Cluster
+
+Lastly, exploring the cluster groups in Malaysia. By focusing on only cluster groups that are still active, workplace is the most common Covid 19-cluster category:
+
+
+```{r}
+
+
+cluster_table <- cluster %>%
+  filter(status == "active") %>%
+  group_by(category) %>%
+  summarise(cases_total = sum(cases_total),
+            icu = sum(icu),
+            deaths = sum(deaths),
+            recovered = sum(recovered),
+            clustergroup_total = length(cluster)) %>%
+  relocate(clustergroup_total, .before = cases_total) %>%
+  arrange(desc(cases_total)) %>%
+  reactable(
+    columns = list(
+    category = colDef(name = "Category"),
+    cases_total = colDef(name = "Total Cases",
+                                cell = data_bars(., 
+                                               fill_color = c("light blue"),
+                                               number_fmt = scales::comma)),
+    clustergroup_total = colDef(name = "Number of cluster groups",
+                                cell = data_bars(., 
+                                               fill_color = c("light blue"),
+                                               number_fmt = scales::comma)),
+    icu = colDef(name = "ICU",
+                 cell = data_bars(.,
+                                  fill_color = c("light blue"),
+                                  number_fmt = scales::comma)),
+    deaths = colDef(name = "Deaths", 
+                    cell = data_bars(., 
+                                     fill_color = c("light blue"),
+                                     number_fmt = scales::comma)),
+    recovered = colDef(name = "Recovered",
+                       cell = data_bars(., 
+                                     fill_color = c("light blue"),
+                                     number_fmt = scales::comma))
+  )) %>%
+  add_title("Covid-19 Clusters (Active cases)", font_family = "Proza Libre", font_size = 25) %>%
+  add_subtitle("1st of March 2020 - 8th of August 2021",  font_family = "Proza Libre", font_size = 15)
+
+
+cluster_table
+
+#save_reactable(cluster_table, "table.png")
+
+```
+
+Thanks again to MoH for releasing Covid-19 related datasets!
+

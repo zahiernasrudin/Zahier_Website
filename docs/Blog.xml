@@ -7,7 +7,16 @@
     <description>Zahier
 </description>
     <generator>Distill</generator>
-    <lastBuildDate>Mon, 05 Jul 2021 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 08 Aug 2021 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>Covid 19: Malaysia</title>
+      <dc:creator>Zahier Nasrudin</dc:creator>
+      <link>https://zahier-nasrudin.netlify.app/posts/malaysia-covid</link>
+      <description>Analyzing the number of Covid 19 cases, number of tests, and clusters in Malaysia</description>
+      <guid>https://zahier-nasrudin.netlify.app/posts/malaysia-covid</guid>
+      <pubDate>Sun, 08 Aug 2021 00:00:00 +0000</pubDate>
+      <media:content url="https://zahier-nasrudin.netlify.app/posts/malaysia-covid/images/scientist.jpg" medium="image" type="image/jpeg"/>
+    </item>
     <item>
       <title>Tidy Tuesday: Employed Status</title>
       <dc:creator>Zahier Nasrudin</dc:creator>
