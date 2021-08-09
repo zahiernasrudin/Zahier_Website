@@ -17,6 +17,23 @@
     "input_file": "malaysiacovid.utf8.md"
   },
   {
+    "path": "posts/resources/",
+    "title": "Resources: R-Studio",
+    "description": "Compiling list of resources that I find useful (R-Studio)",
+    "author": [
+      {
+        "name": "Zahier Nasrudin",
+        "url": "https://zahier-nasrudin.netlify.app/"
+      }
+    ],
+    "date": "2021-08-09",
+    "categories": [],
+    "contents": "\r\n\r\nContents\r\nIntroduction\r\nResources\r\n\r\nIntroduction\r\nHi! This blog post is a space where I will document a list of useful resources for R-Studio\r\nResources\r\nPlease use the search button provided!\r\n\r\n\r\n{\"x\":{\"tag\":{\"name\":\"Reactable\",\"attribs\":{\"data\":{\"Topic\":[\"<a title = 'data table & dplyr side by side' href = 'https://atrebas.github.io/post/2019-03-03-datatable-dplyr/'>data table & dplyr side by side<\\/a>\",\"<a title = 'Using DT in Shiny' href = 'https://rstudio.github.io/DT/shiny.html'>Using DT in Shiny<\\/a>\",\"<a title = 'Text Mining in R' href = 'https://www.tidytextmining.com/index.html'>Text Mining in R<\\/a>\"],\"Category\":[\"data wrangling\",\"shiny\",\"text mining\"],\"Description\":[\"Comparing the functions side by side\",\"Rendering DT table in Shiny guide\",\"Amazing book covering text mining in R\"]},\"columns\":[{\"accessor\":\"Topic\",\"name\":\"Topic\",\"type\":\"character\",\"resizable\":true,\"html\":true},{\"accessor\":\"Category\",\"name\":\"Category\",\"type\":\"character\"},{\"accessor\":\"Description\",\"name\":\"Description\",\"type\":\"character\"}],\"filterable\":true,\"defaultPageSize\":10,\"paginationType\":\"numbers\",\"showPageInfo\":true,\"minRows\":1,\"dataKey\":\"209e6af76a3ae78ca0bae44be1c359bc\",\"key\":\"209e6af76a3ae78ca0bae44be1c359bc\"},\"children\":[]},\"class\":\"reactR_markup\"},\"evals\":[],\"jsHooks\":[]}\r\n\r\n\r\n\r\n",
+    "preview": "posts/resources/images/books.jpg",
+    "last_modified": "2021-08-09T17:32:12+08:00",
+    "input_file": "zahier-resources.utf8.md"
+  },
+  {
     "path": "posts/shiny-employviz/",
     "title": "Tidy Tuesday: Employed Status",
     "description": "Exploring Employed Status using a Tidy Tuesday dataset",

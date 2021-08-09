@@ -7,15 +7,24 @@
     <description>Zahier
 </description>
     <generator>Distill</generator>
-    <lastBuildDate>Sun, 08 Aug 2021 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 09 Aug 2021 00:00:00 +0000</lastBuildDate>
     <item>
       <title>Covid 19: Malaysia</title>
       <dc:creator>Zahier Nasrudin</dc:creator>
       <link>https://zahier-nasrudin.netlify.app/posts/malaysia-covid</link>
       <description>Analyzing the number of Covid 19 cases, number of tests, and clusters in Malaysia</description>
       <guid>https://zahier-nasrudin.netlify.app/posts/malaysia-covid</guid>
-      <pubDate>Sun, 08 Aug 2021 00:00:00 +0000</pubDate>
+      <pubDate>Mon, 09 Aug 2021 00:00:00 +0000</pubDate>
       <media:content url="https://zahier-nasrudin.netlify.app/posts/malaysia-covid/images/scientist.jpg" medium="image" type="image/jpeg"/>
+    </item>
+    <item>
+      <title>Resources: R-Studio</title>
+      <dc:creator>Zahier Nasrudin</dc:creator>
+      <link>https://zahier-nasrudin.netlify.app/posts/resources</link>
+      <description>Compiling list of resources that I find useful (R-Studio)</description>
+      <guid>https://zahier-nasrudin.netlify.app/posts/resources</guid>
+      <pubDate>Sun, 08 Aug 2021 00:00:00 +0000</pubDate>
+      <media:content url="https://zahier-nasrudin.netlify.app/posts/resources/images/books.jpg" medium="image" type="image/jpeg"/>
     </item>
     <item>
       <title>Tidy Tuesday: Employed Status</title>
