@@ -86,7 +86,7 @@ stem_malay(Word = c("banyaknya", "sakitnya", "kemahuan"),
 
 ```
 
-Now, if you have a data frame that contains word that you want to stem:
+Now, if you have a data frame that contains word(s) that you want to stem:
 
 1.  Create a data frame called x to be used as an example
 2.  Specify the column you want to stem in "col_feature1"
