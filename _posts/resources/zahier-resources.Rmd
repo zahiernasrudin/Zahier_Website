@@ -1,11 +1,11 @@
 ---
 title: "Resources: R-Studio"
 description: |
-  Compiling list of resources that I find useful (R-Studio)   
+  Compiling a list of useful resources (R-Studio)   
 author:
   - name: Zahier Nasrudin
     url: https://zahier-nasrudin.netlify.app/
-date: 08-09-2021
+date: "`r Sys.Date()`"
 preview: images/books.jpg
 
 output:
