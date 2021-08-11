@@ -1,0 +1,106 @@
+---
+title: "malaytextr: Stemming malay text"
+description: |
+  Stemming malay text using stem_malay() from malaytextr package in R  
+author:
+  - name: Zahier Nasrudin
+    url: https://zahier-nasrudin.netlify.app/
+date: "`r Sys.Date()`"
+preview: images/malaysiaflag.jpg
+bibliography: citations.bib
+output:
+  distill::distill_article:
+    self_contained: false
+    toc: true
+    toc_depth: 2
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = T, warning = F, message = F)
+
+
+
+```
+
+# Introduction
+
+A package for handling malay text in R is currently being developed ([malaytextr](https://github.com/zahiernasrudin/malaytextr)). It is aimed to easily handle malay text (stemming, stopwords and more).
+
+As of now:
+
+1.  malayrootwords: A malay root words data frame: Can be served as a dictionary/reference
+2.  stem_malay(): A function to stem malay words. For example, "semangatnya" will now change to "semangat". This function will first find the malay words in a dictionary (malayrootwords can be used). It will then follow the framework from [@khanmalay]
+
+# Example
+
+### Install malaytextr package
+
+The malaytextr package can be installed from Github:
+
+```{r, eval=FALSE}
+
+# install.packages("devtools")
+devtools::install_github("zahiernasrudin/malaytextr")
+
+
+```
+
+### Load libraries
+
+```{r}
+
+library(malaytextr)
+library(dplyr) # for data wrangling
+
+```
+
+### Malay root words
+
+There is a data frame (malayrootwords) that can be used as a dictionary. This data frame will definitely be updated with more words in the near future. Currently, the malayrootwords data frame contains 4244 rows:
+
+```{r}
+
+malayrootwords
+
+```
+
+### Stemming
+
+To perform stem_malay(), it is pretty simple to do it. For example you want stem "banyaknya". You will just need to specify "banyaknya" and our dictionary which is "malayrootwords". It will then return a data frame ("banyaknya" and the root word "banyak"):
+
+```{r}
+
+stem_malay(Word = "banyaknya",
+           dictionary = malayrootwords)
+
+
+```
+
+If you want to stem more than one word, for example "banyaknya" , "sakitnya" and "kemahuan":
+
+```{r}
+
+stem_malay(Word = c("banyaknya", "sakitnya", "kemahuan"),
+           dictionary = malayrootwords)
+
+
+```
+
+Now, if you have a data frame that contains word that you want to stem:
+
+1.  Create a data frame called x to be used as an example
+2.  Specify the column you want to stem in "col_feature1"
+
+```{r}
+
+x <- data.frame(text = c("banyaknya","sangat","terkedu", "pengetahuan"))
+
+stem_malay(Word = x, 
+           dictionary = malayrootwords, 
+           col_feature1 = "text")
+
+```
+
+Please have a look and to report a bug, please file an issue on [Github](https://github.com/zahiernasrudin/malaytextr/issues)
+
+Thank you :)

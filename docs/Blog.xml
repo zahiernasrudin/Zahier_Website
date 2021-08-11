@@ -7,15 +7,24 @@
     <description>Zahier
 </description>
     <generator>Distill</generator>
-    <lastBuildDate>Tue, 10 Aug 2021 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 11 Aug 2021 00:00:00 +0000</lastBuildDate>
     <item>
       <title>Resources: R-Studio</title>
       <dc:creator>Zahier Nasrudin</dc:creator>
       <link>https://zahier-nasrudin.netlify.app/posts/resources</link>
       <description>Compiling a list of useful resources (R-Studio)</description>
       <guid>https://zahier-nasrudin.netlify.app/posts/resources</guid>
-      <pubDate>Tue, 10 Aug 2021 00:00:00 +0000</pubDate>
+      <pubDate>Wed, 11 Aug 2021 00:00:00 +0000</pubDate>
       <media:content url="https://zahier-nasrudin.netlify.app/posts/resources/images/books.jpg" medium="image" type="image/jpeg"/>
+    </item>
+    <item>
+      <title>malaytextr: Stemming malay text</title>
+      <dc:creator>Zahier Nasrudin</dc:creator>
+      <link>https://zahier-nasrudin.netlify.app/posts/malaytextr-package-stem</link>
+      <description>Stemming malay text using stem_malay() from malaytextr package in R</description>
+      <guid>https://zahier-nasrudin.netlify.app/posts/malaytextr-package-stem</guid>
+      <pubDate>Tue, 10 Aug 2021 00:00:00 +0000</pubDate>
+      <media:content url="https://zahier-nasrudin.netlify.app/posts/malaytextr-package-stem/images/malaysiaflag.jpg" medium="image" type="image/jpeg"/>
     </item>
     <item>
       <title>Covid 19: Malaysia</title>
