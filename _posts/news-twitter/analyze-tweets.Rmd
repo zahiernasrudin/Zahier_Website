@@ -1,0 +1,212 @@
+---
+title: "Text Mining: Analyzing Malaysia's News Twitter Accounts"
+description: |
+  Analyzing Malaysia's News Twitter Accounts using malaytextr & tidytext from R-Studio
+author:
+  - name: Zahier Nasrudin
+    url: https://zahier-nasrudin.netlify.app/
+date: "`r Sys.Date()`"
+preview: images/calendar.jpg
+output:
+  distill::distill_article:
+    self_contained: false
+    toc: true
+    toc_depth: 2
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = T, warning = F, message = F)
+
+library(readr)
+library(tidytext)
+library(dplyr)
+library(stringr)
+library(malaytextr)
+library(ggplot2)
+library(forcats)
+library(stopwords)
+library(reactable)
+library(lubridate)
+
+
+theme_set(theme_minimal())
+```
+
+# Introduction
+
+This blog post will be focusing on analyzing 4 Malaysia's News Twitter Accounts:
+
+1.  Berita Harian
+2.  Harian Metro
+3.  Sinar
+4.  Utusan Malaysia
+
+Our aim for this is to show how to perform simple text analysis using malaytextr and tidytext packages! The dataset that we will use is extracted from twitter and can be downloaded from the github:
+
+```{r}
+
+malay_news <- read_csv("https://raw.githubusercontent.com/zahiernasrudin/datasets/main/malay_news.csv")
+
+```
+
+Information about the dataset: It has 12,789 obsevations and 90 columns
+
+```{r}
+
+glimpse(malay_news)
+```
+
+# Process
+
+## Distribution of tweets
+
+All of the 4 Twitter news accounts tweeted mostly during the morning and then started to slow down after 3 p.m. Then they started to tweet again after 8 p.m.
+
+```{r}
+
+malay_news %>%
+  mutate(time = hour(created_at)) %>%
+  count(time, screen_name) %>%
+  ggplot(aes(x = time, y = n, fill = screen_name)) +
+  geom_col(show.legend = F) +
+  facet_wrap(~ screen_name, scales = "free") +
+  labs(title = "Time tweeted",
+       subtitle = "From 22nd of July 2021 to 12th of August 2021")
+
+```
+
+## Source of tweets
+
+What did they use to tweet?
+
+```{r, fig.height = 7, fig.width = 8}
+
+malay_news %>%
+  count(screen_name, source) %>%
+  mutate(source = reorder_within(source, n, screen_name)) %>%
+  ggplot(aes(x = source, y = n, fill = screen_name)) +
+  geom_col(show.legend = F) +
+  geom_text(aes(label=  n), 
+                vjust=0.5, hjust=0, size = 3.2)+
+  facet_wrap(~ screen_name, scales = "free", ncol = 1) +
+  coord_flip() +
+  scale_x_reordered() +
+  labs(title = "Source of Tweets",
+       subtitle = "From 22nd of July 2021 to 12th of August 2021")
+
+
+
+```
+
+## Word Frequencies
+
+To get the word frequencies, we will first remove the urls, perform word tokenization & stemming and remove the stopwords.
+
+### Remove URLs
+
+This is a new function from malaytextr called remove_url(). What it does is pretty straightforward, it will remove URLs from a string.
+
+1.  We will first select only columns that we want to use for the analysis using select() from dplyr
+2.  Then, we remove URLs using remove_url from malaytextr
+
+Table below shows a glimpse of the dataset in which the links have been removed (text_clean) column
+
+```{r layout= "l-body-outset"}
+
+malay_news_clean1 <- malay_news %>%
+  select(created_at, screen_name, text, source) %>%
+  mutate(text_clean = remove_url(text)) 
+
+# Table
+reactable(head(malay_news_clean1),
+          highlight = T,
+          columns = list(
+            created_at = colDef(width = 150),
+            screen_name = colDef(width = 150),
+            text = colDef(width = 1000),
+            text_clean = colDef(width = 1000)
+          ))
+```
+
+### Word Tokenization & Word Stemming
+
+We will then perform word tokenization using unnest_tokens() from tidytext and stem_malay() from malaytextr.
+
+A glimpse once word tokenization & word stemming have been performed:
+
+```{r layout= "l-body-outset"}
+
+malay_news_clean2 <- malay_news_clean1 %>%
+  select(-text) %>%
+  unnest_tokens(output=word, input= text_clean) %>%
+  stem_malay(dictionary = malayrootwords, 
+             col_feature1 = "word")
+  
+
+reactable(head(malay_news_clean2),
+          highlight = T)
+```
+
+### Stopwords removal
+
+1.  Malay stopwords can be obtained from the stopword package
+2.  We will use anti_join from dplyr to remove stopwords from our dataset
+3.  We will also remove unnecessary words such as "bhnasional" and "umnasional"
+
+```{r}
+
+malay_stopwords <- data.frame(stopword = stopwords("ms", source = "stopwords-iso"))
+
+malay_news_clean3 <- malay_news_clean2 %>%
+  anti_join(malay_stopwords, by = c("root_word" = "stopword")) %>%
+  filter(!str_detect(root_word,
+                     "sinarhari|bhnasional|kualalumpur|bhdunia|umnasional|bhsu|sinarpremium|bhwilayah|bhbisnes|bhhibur|bh|bhkes"))
+
+
+```
+
+## Plot the word frequencies across Twitter users
+
+Showing the top 20 most common words across Berita Harian, Harian Metro, Sinar and Utusan Malaysia
+
+-   For Berita Harian (bharianmy) & Harian Metro (hmetromy):
+
+    -   Covid19 is the most talked about and followed by tokyo2020 (Olympics)
+
+-   For Sinar (sinaronline) & Utusan Malaysia (umonline):
+
+    -   Covid19 & Raja (King)
+
+```{r, fig.height = 6, fig.width = 8}
+
+
+malay_news_clean3 %>%
+  count(screen_name, root_word, sort = T) %>%
+  group_by(screen_name) %>%
+  slice_max(n, n = 20) %>%
+  mutate(root_word = reorder_within(root_word, n, screen_name)) %>%
+  ggplot(aes(x = root_word, n)) +
+  geom_col(fill = "light blue") +
+  coord_flip() +
+  scale_x_reordered() +
+  facet_wrap(~ screen_name, scales = "free")
+
+```
+
+To summarize,
+
+1.  We plot the distribution (When did they tweet)
+
+2.  We plot the source of the tweets
+
+3.  We plot the word frequencies. In order to do that:
+
+    1.  We remove the urls using remove_url from malaytextr package
+
+    2.  We perform word tokenization using unnest_tokens from tidytext package
+
+    3.  We perform word stemming using stem_malay from malaytextr package
+
+    4.  We remove stopwords from stopwords package
+
+Please let me what you think. Thanks!

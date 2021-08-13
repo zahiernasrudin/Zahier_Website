@@ -7,14 +7,23 @@
     <description>Zahier
 </description>
     <generator>Distill</generator>
-    <lastBuildDate>Wed, 11 Aug 2021 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 13 Aug 2021 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>Text Mining: Analyzing Malaysia's News Twitter Accounts</title>
+      <dc:creator>Zahier Nasrudin</dc:creator>
+      <link>https://zahier-nasrudin.netlify.app/posts/news-twitter</link>
+      <description>Analyzing Malaysia's News Twitter Accounts using malaytextr &amp; tidytext from R-Studio</description>
+      <guid>https://zahier-nasrudin.netlify.app/posts/news-twitter</guid>
+      <pubDate>Fri, 13 Aug 2021 00:00:00 +0000</pubDate>
+      <media:content url="https://zahier-nasrudin.netlify.app/posts/news-twitter/analyze-tweets_files/figure-html5/unnamed-chunk-3-1.png" medium="image" type="image/png" width="1248" height="768"/>
+    </item>
     <item>
       <title>Resources: R-Studio</title>
       <dc:creator>Zahier Nasrudin</dc:creator>
       <link>https://zahier-nasrudin.netlify.app/posts/resources</link>
       <description>Compiling a list of useful resources (R-Studio)</description>
       <guid>https://zahier-nasrudin.netlify.app/posts/resources</guid>
-      <pubDate>Wed, 11 Aug 2021 00:00:00 +0000</pubDate>
+      <pubDate>Thu, 12 Aug 2021 00:00:00 +0000</pubDate>
       <media:content url="https://zahier-nasrudin.netlify.app/posts/resources/images/books.jpg" medium="image" type="image/jpeg"/>
     </item>
     <item>
@@ -23,7 +32,7 @@
       <link>https://zahier-nasrudin.netlify.app/posts/malaytextr-package-stem</link>
       <description>Stemming malay text using stem_malay() from malaytextr package in R</description>
       <guid>https://zahier-nasrudin.netlify.app/posts/malaytextr-package-stem</guid>
-      <pubDate>Tue, 10 Aug 2021 00:00:00 +0000</pubDate>
+      <pubDate>Wed, 11 Aug 2021 00:00:00 +0000</pubDate>
       <media:content url="https://zahier-nasrudin.netlify.app/posts/malaytextr-package-stem/images/malaysiaflag.jpg" medium="image" type="image/jpeg"/>
     </item>
     <item>
